@@ -4,9 +4,15 @@
 %table#movies
   %thead
     %tr
-      %th Movie Title
+      - if flash[:sort].eql?('title') 
+        %th.hilite= link_to 'Movie Title', {:sort => "title"}, :id => 'title_header'
+      - else
+        %th= link_to 'Movie Title', {:sort => "title"}, :id => 'title_header'
       %th Rating
-      %th Release Date
+      - if flash[:sort].eql?('release_date')
+        %th.hilite= link_to 'Release Date', {:sort => "release_date"}, :id => 'release_date_header'
+      - else
+        %th= link_to 'Release Date', {:sort => "release_date"}, :id => 'release_date_header'
       %th More Info
   %tbody
     - @movies.each do |movie|
