@@ -7,8 +7,18 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.order(params[:sort])
-    flash[:sort]=params[:sort]
+    @all_ratings = Movie.select(:rating).map(&:rating).uniq
+    @selected_ratings = Hash.new
+    if session[:first_time] == nil
+      @all_ratings.each {|rating| @selected_ratings[rating] = "1"}
+      @movies = Movie.all
+      session[:first_time] = false
+    else
+      @selected_ratings = params[:ratings]
+      @movies = Movie.find(:all, :conditions => {:rating => params[:ratings].keys}, :order => params[:sort])
+      #session[:sort]= params[:sort]
+      #session[:rating] = @selected_rating
+    end
   end
 
   def new
